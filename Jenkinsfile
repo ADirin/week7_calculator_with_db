@@ -9,7 +9,7 @@ pipeline {
         PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         DOCKER_IMAGE = 'amirdirin/travelcalculator_db'
-        DOCKER_TAG = 'latest'
+        DOCKER_TAG = 'v1'
     }
 
     stages {
