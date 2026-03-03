@@ -6,42 +6,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-
 public class Main extends Application {
 
-    // ===== DATABASE CONFIG =====
-    private static final String URL =
-            "jdbc:mariadb://db:3306/speed1_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Test12";
+    private final SpeedService speedService = new SpeedService();
 
     // ===== CALCULATION =====
     public static double speedAverage(double distance, double time) {
         return distance / time;
-    }
-
-    // ===== SAVE TO DATABASE =====
-    private void saveToDatabase(double distance, double time, double speed) {
-
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
-
-            String sql = "INSERT INTO speeds(distance, time, average_speed) VALUES (?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setDouble(1, distance);
-            stmt.setDouble(2, time);
-            stmt.setDouble(3, speed);
-
-            stmt.executeUpdate();
-
-            System.out.println("Saved to database!");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();  // VERY IMPORTANT for debugging
-        }
     }
 
     // ===== UI =====
@@ -70,7 +41,7 @@ public class Main extends Application {
                 double speed = speedAverage(distance, time);
 
                 // SAVE TO DATABASE
-                saveToDatabase(distance, time, speed);
+                speedService.saveSpeed(distance, time, speed);
 
                 resultLabel.setText("Average Speed: " + speed);
 
